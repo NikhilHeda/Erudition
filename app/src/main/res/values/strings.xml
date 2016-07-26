@@ -11,6 +11,7 @@
         <item>Login</item>
         <item>Sign up</item>
         <item>Settings</item>
+        <item>Upload</item>
     </string-array>
 
     <array name="drawer_icons">
@@ -18,9 +19,29 @@
         <item>@drawable/ic_login</item>
         <item>@drawable/ic_signup</item>
         <item>@drawable/ic_settings</item>
+        <item>@drawable/ic_upload</item>
     </array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="spinner_topics">
+        <item>Topic 1</item>
+        <item>Topic 2</item>
+        <item>Topic 3</item>
+        <item>Topic 4</item>
+        <item>Topic 5</item>
+    </string-array>
+
+    <string-array name="spinner_weightage">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+    </string-array>
+
+    <string-array name="spinner_answer">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+    </string-array>
 
 </resources>
