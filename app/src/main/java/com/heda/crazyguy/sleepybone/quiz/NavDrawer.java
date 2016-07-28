@@ -49,6 +49,7 @@ public class NavDrawer extends ActionBarActivity {
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1), true, "50+"));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
 
         navMenuIcons.recycle();
 
@@ -147,6 +148,9 @@ public class NavDrawer extends ActionBarActivity {
                 break;
             case 3:
                 fragment = new SettingsFragment();
+                break;
+            case 4:
+                fragment = new UploadFragment();
                 break;
         }
 
