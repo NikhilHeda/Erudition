@@ -4,7 +4,7 @@
     <string name="app_name">Erudition</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="root"></string>
+    <string name="root">http:///Android/</string>
 
     <string-array name="drawer_items">
         <item>Home</item>
