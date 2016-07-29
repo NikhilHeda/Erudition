@@ -16,7 +16,6 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -80,7 +79,7 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 
     private boolean checkCredentials() {
         boolean flag = true;
-        if( !( q.equals("") || opA.equals("") || opB.equals("") || opC.equals("") || opD.equals("")) ) {
+        if (!(q.equals("") || opA.equals("") || opB.equals("") || opC.equals("") || opD.equals(""))) {
             String result = null;
             try {
                 result = new InsertQuestion().execute(q, opA, opB, opC, opD, t, w, c).get();
@@ -133,13 +132,13 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line;
-                while( (line = br.readLine()) != null ) {
+                while ((line = br.readLine()) != null) {
                     sb.append(line);
                 }
 
                 return sb.toString();
 
-            }catch (Exception e) {
+            } catch (Exception e) {
                 return "Exception: " + e.getMessage();
             }
         }
