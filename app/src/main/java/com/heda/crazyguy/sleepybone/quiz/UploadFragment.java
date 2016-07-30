@@ -27,11 +27,11 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 
     Button upload;
     EditText q_statement, oA, oB, oC, oD;
-    Spinner topic, weightage, correct;
+    Spinner topicSpinner, weightage, correct;
 
     String q, opA, opB, opC, opD, t, w, c, topic_id;
 
-    JSONArray topics;
+    JSONArray topicArray;
 
     @Nullable
     @Override
@@ -50,22 +50,20 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
         oC = (EditText) rootView.findViewById(R.id.etOptionC);
         oD = (EditText) rootView.findViewById(R.id.etOptionD);
 
-        topic = (Spinner) rootView.findViewById(R.id.sTopic);
+        topicSpinner = (Spinner) rootView.findViewById(R.id.sTopic);
         weightage = (Spinner) rootView.findViewById(R.id.sWeightage);
         correct = (Spinner) rootView.findViewById(R.id.sAnswer);
 
+        upload = (Button) rootView.findViewById(R.id.bUpload);
+
         try {
-            topics = new JSONArray(new GetTopics().execute(1).get());
+            topicArray = new JSONArray(new GetTopics().execute(1).get());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Toast.makeText(getActivity(), topics.length(), Toast.LENGTH_LONG);
-//        topic.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, topics_object.getArray(topics)));
-//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, getArray(topics));
-//        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        topic.setAdapter(dataAdapter);
-
-        upload = (Button) rootView.findViewById(R.id.bUpload);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, getArray(topicArray));
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        topicSpinner.setAdapter(dataAdapter);
 
         upload.setOnClickListener(this);
     }
@@ -89,11 +87,9 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
         opC = oC.getText().toString();
         opD = oD.getText().toString();
 
-        t = topic.getSelectedItem().toString();
+        t = topicSpinner.getSelectedItem().toString();
         w = weightage.getSelectedItem().toString();
         c = correct.getSelectedItem().toString();
-
-//        Toast.makeText(getActivity(), q + ", " + opA + ", " + opB + ", " + opC + ", " + opD + ", " + t + ", " + w + ", " + c, Toast.LENGTH_SHORT).show();
 
         if (checkCredentials()) {
             Bundle b = new Bundle();
@@ -111,7 +107,7 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
             try {
                 result = new InsertQuestion().execute(q, opA, opB, opC, opD, t, w, c).get();
                 topic_id = result;
-                Toast.makeText(getActivity(), result, Toast.LENGTH_LONG);
+                Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 e.printStackTrace();
             }

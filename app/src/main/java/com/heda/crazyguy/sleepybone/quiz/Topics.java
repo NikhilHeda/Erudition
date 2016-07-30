@@ -40,7 +40,7 @@ public class Topics extends ListActivity {
 
     }
 
-    public String[] getArray(JSONArray topic_headings) {
+    private String[] getArray(JSONArray topic_headings) {
         String[] topics = new String[topic_headings.length()];
         try {
             for (int i = 0; i < topic_headings.length(); i++)
@@ -66,8 +66,7 @@ public class Topics extends ListActivity {
         }
     }
 
-
-    public class GetTopics extends AsyncTask<Integer, Void, String> {
+    private class GetTopics extends AsyncTask<Integer, Void, String> {
 
         String url = getResources().getString(R.string.root) + "retrieve_topics.php";
 
