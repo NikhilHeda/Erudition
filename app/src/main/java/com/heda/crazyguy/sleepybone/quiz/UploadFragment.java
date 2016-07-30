@@ -8,10 +8,13 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,7 +29,9 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
     EditText q_statement, oA, oB, oC, oD;
     Spinner topic, weightage, correct;
 
-    String q, opA, opB, opC, opD, t, w, c, user_id;
+    String q, opA, opB, opC, opD, t, w, c, topic_id;
+
+    JSONArray topics;
 
     @Nullable
     @Override
@@ -49,9 +54,31 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
         weightage = (Spinner) rootView.findViewById(R.id.sWeightage);
         correct = (Spinner) rootView.findViewById(R.id.sAnswer);
 
+        try {
+            topics = new JSONArray(new GetTopics().execute(1).get());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(getActivity(), topics.length(), Toast.LENGTH_LONG);
+//        topic.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, topics_object.getArray(topics)));
+//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, getArray(topics));
+//        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        topic.setAdapter(dataAdapter);
+
         upload = (Button) rootView.findViewById(R.id.bUpload);
 
         upload.setOnClickListener(this);
+    }
+
+    public String[] getArray(JSONArray topic_headings) {
+        String[] topics = new String[topic_headings.length()];
+        try {
+            for (int i = 0; i < topic_headings.length(); i++)
+                topics[i] = topic_headings.getJSONObject(i).getString("topic_name");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return topics;
     }
 
     @Override
@@ -66,11 +93,11 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
         w = weightage.getSelectedItem().toString();
         c = correct.getSelectedItem().toString();
 
-        Toast.makeText(getActivity(), q + ", " + opA + ", " + opB + ", " + opC + ", " + opD + ", " + t + ", " + w + ", " + c, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), q + ", " + opA + ", " + opB + ", " + opC + ", " + opD + ", " + t + ", " + w + ", " + c, Toast.LENGTH_SHORT).show();
 
         if (checkCredentials()) {
             Bundle b = new Bundle();
-            b.putString("user_id", user_id);
+            b.putString("topic_id", topic_id);
             Intent i = new Intent("com.heda.crazyguy.sleepybone.quiz.TOPICS");
             i.putExtras(b);
             startActivity(i);
@@ -83,7 +110,8 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
             String result = null;
             try {
                 result = new InsertQuestion().execute(q, opA, opB, opC, opD, t, w, c).get();
-                user_id = result;
+                topic_id = result;
+                Toast.makeText(getActivity(), result, Toast.LENGTH_LONG);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -134,6 +162,42 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
                 String line;
                 while ((line = br.readLine()) != null) {
                     sb.append(line);
+                }
+
+                return sb.toString();
+
+            } catch (Exception e) {
+                return "Exception: " + e.getMessage();
+            }
+        }
+    }
+
+    public class GetTopics extends AsyncTask<Integer, Void, String> {
+
+        String url = getResources().getString(R.string.root) + "retrieve_topics.php";
+
+        @Override
+        protected String doInBackground(Integer... params) {
+
+            try {
+
+                String data = URLEncoder.encode("flag", "UTF-8") + "=" + URLEncoder.encode(params[0].toString(), "UTF-8");
+
+                URL u = new URL(url);
+                URLConnection conn = u.openConnection();
+
+                conn.setDoOutput(true);
+
+                OutputStreamWriter ow = new OutputStreamWriter(conn.getOutputStream());
+                ow.write(data);
+                ow.flush();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                    sb.append("\n");
                 }
 
                 return sb.toString();

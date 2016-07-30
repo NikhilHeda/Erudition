@@ -14,7 +14,7 @@
 	$query = "
 		SELECT topic_id
 		FROM topics
-		WHERE topic_name = $topic_name;
+		WHERE topic_name = $topic_name
 	";
 
 	($query_run = mysql_query($query)) or die(mysql_error());
@@ -25,8 +25,16 @@
 			'',
 			$weightage,
 			$topic_id,
-			
+			$q_statement,
+			$option1,
+			$option2,
+			$option3,
+			$option4,
+			$correct
 		)
 	";
 
+	($query_run = mysql_query($query)) or die(mysql_error());
+
+	echo $topic_id;
 ?>
