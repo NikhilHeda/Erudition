@@ -1,10 +1,17 @@
 package com.heda.crazyguy.sleepybone.quiz;
 
+import android.app.Fragment;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -17,17 +24,21 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-public class Topics extends ListActivity {
+public class TopicsFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private JSONArray topic_headings;
 
     private Bundle b1 = new Bundle();
     private String user_id;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle b2 = getIntent().getExtras();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.topics_fragment, container, false);
+
+        ListView allTopics = (ListView) rootView.findViewById(R.id.lvAllTopics);
+
+        Bundle b2 = getActivity().getIntent().getExtras();
         user_id = b2.getString("user_id");
 
         try {
@@ -36,8 +47,24 @@ public class Topics extends ListActivity {
             e.printStackTrace();
         }
 
-        setListAdapter(new ArrayAdapter<String>(Topics.this, android.R.layout.simple_list_item_1, getArray(topic_headings)));
+        allTopics.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, getArray(topic_headings)));
+        allTopics.setOnItemClickListener(this);
 
+        return rootView;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        try {
+            String topic_id = topic_headings.getJSONObject(i).getString("topic_id");
+            b1.putString("topic_id", topic_id);
+            b1.putString("user_id", user_id);
+            Intent intent = new Intent("com.heda.crazyguy.sleepybone.quiz.QUESTIONS");
+            intent.putExtras(b1);
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private String[] getArray(JSONArray topic_headings) {
@@ -49,21 +76,6 @@ public class Topics extends ListActivity {
             e.printStackTrace();
         }
         return topics;
-    }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        try {
-            String topic_id = topic_headings.getJSONObject(position).getString("topic_id");
-            b1.putString("topic_id", topic_id);
-            b1.putString("user_id", user_id);
-            Intent i = new Intent("com.heda.crazyguy.sleepybone.quiz.QUESTIONS");
-            i.putExtras(b1);
-            startActivity(i);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private class GetTopics extends AsyncTask<Integer, Void, String> {

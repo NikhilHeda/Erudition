@@ -50,9 +50,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         if (check_user(email, password)) {
             Bundle b = new Bundle();
             b.putString("user_id", user_id);
-            i = new Intent("com.heda.crazyguy.sleepybone.quiz.TOPICS");
+            i = new Intent(getActivity(), HomePageNav.class);
             i.putExtras(b);
-            startActivity(i);
+            getActivity().startActivity(i);
         } else {
             Toast.makeText(getActivity(), "Invalid Entries", Toast.LENGTH_SHORT).show();
             etPassword.setText("");
