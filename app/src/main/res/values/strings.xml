@@ -4,7 +4,7 @@
     <string name="app_name">Erudition</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="root">http://localhost/</string>
+    <string name="root">http://192.168.1.7/Nikhil/Erudition/Android/</string>
 
     <string-array name="drawer_items">
         <item>Home</item>
@@ -62,6 +62,19 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+    </string-array>
+
+    <string-array name="spinner_rating">
+        <item>10</item>
+        <item>9</item>
+        <item>8</item>
+        <item>7</item>
+        <item>6</item>
+        <item>5</item>
+        <item>4</item>
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
     </string-array>
 
 </resources>

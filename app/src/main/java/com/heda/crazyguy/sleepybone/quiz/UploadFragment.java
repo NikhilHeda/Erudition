@@ -1,7 +1,7 @@
 package com.heda.crazyguy.sleepybone.quiz;
 
 import android.app.Fragment;
-import android.content.Intent;
+import android.app.FragmentManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -57,7 +57,9 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
         upload = (Button) rootView.findViewById(R.id.bUpload);
 
         try {
-            topicArray = new JSONArray(new GetTopics().execute(1).get());
+            String rootUrl = getResources().getString(R.string.root);
+            String flag = "1";
+            topicArray = new JSONArray(new GetTopics().execute(rootUrl, "1", flag).get());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,9 +96,15 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
         if (checkCredentials()) {
             Bundle b = new Bundle();
             b.putString("topic_id", topic_id);
-            Intent i = new Intent("com.heda.crazyguy.sleepybone.quiz.TOPICS");
-            i.putExtras(b);
-            startActivity(i);
+
+            Fragment fragment = new HomeFragment();
+
+            fragment.setArguments(b);
+
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flMainContent, fragment).commit();
+
+            getActivity().setTitle("Home");
         }
     }
 
@@ -158,42 +166,6 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
                 String line;
                 while ((line = br.readLine()) != null) {
                     sb.append(line);
-                }
-
-                return sb.toString();
-
-            } catch (Exception e) {
-                return "Exception: " + e.getMessage();
-            }
-        }
-    }
-
-    public class GetTopics extends AsyncTask<Integer, Void, String> {
-
-        String url = getResources().getString(R.string.root) + "retrieve_topics.php";
-
-        @Override
-        protected String doInBackground(Integer... params) {
-
-            try {
-
-                String data = URLEncoder.encode("flag", "UTF-8") + "=" + URLEncoder.encode(params[0].toString(), "UTF-8");
-
-                URL u = new URL(url);
-                URLConnection conn = u.openConnection();
-
-                conn.setDoOutput(true);
-
-                OutputStreamWriter ow = new OutputStreamWriter(conn.getOutputStream());
-                ow.write(data);
-                ow.flush();
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                    sb.append("\n");
                 }
 
                 return sb.toString();

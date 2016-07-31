@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -102,6 +103,7 @@ public class HomePageNav extends ActionBarActivity {
             menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
             return super.onPrepareOptionsMenu(menu);
         }
+    */
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
@@ -109,6 +111,7 @@ public class HomePageNav extends ActionBarActivity {
             if (mDrawerToggle.onOptionsItemSelected(item)) {
                 return true;
             }
+            /*
             // Handle action bar actions click
             switch (item.getItemId()) {
                 case R.id.action_settings:
@@ -116,8 +119,10 @@ public class HomePageNav extends ActionBarActivity {
                 default:
                     return super.onOptionsItemSelected(item);
             }
+            */
+            return super.onOptionsItemSelected(item);
         }
-    */
+
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
@@ -134,7 +139,7 @@ public class HomePageNav extends ActionBarActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
+        // Pass any configuration change to the drawer toggles
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
@@ -150,19 +155,15 @@ public class HomePageNav extends ActionBarActivity {
                 // fragment = new TotalScoreFragment();
                 break;
             case 2:
+            case 3:
+            case 4:
                 fragment = new TopicsFragment();
                 break;
-            case 3:
-                //fragment = new AttemptedFragment();
-                break;
-            case 4:
-                //fragment = new PopularFragment();
-                break;
             case 5:
-                //fragment = new ChangePasswordFragment();
+                fragment = new ChangePasswordFragment();
                 break;
             case 6:
-                //fragment = new FeedbackFragment();
+                fragment = new FeedbackFragment();
                 break;
             case 7:
                 //fragment = new LogoutFragment();

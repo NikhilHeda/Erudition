@@ -1,13 +1,9 @@
 package com.heda.crazyguy.sleepybone.quiz;
 
 import android.app.Fragment;
-import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.json.JSONArray;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 
 public class TopicsFragment extends Fragment implements AdapterView.OnItemClickListener {
 
@@ -41,12 +30,25 @@ public class TopicsFragment extends Fragment implements AdapterView.OnItemClickL
         Bundle b2 = getActivity().getIntent().getExtras();
         user_id = b2.getString("user_id");
 
+        /*
+            Getting the type of topics selected.
+            2 All
+            3 Attempted
+            4 Popular
+
+            To pass in php (flag value)
+            1 All
+            2 Attempted
+            3 Popular
+        */
+
         try {
-            topic_headings = new JSONArray(new GetTopics().execute(1).get()); // Passing the flag as an integer 1 - all topics
+            String rootUrl = getResources().getString(R.string.root);
+            String flag = Integer.toString(getArguments().getInt("position") - 1);
+            topic_headings = new JSONArray(new GetTopics().execute(rootUrl, user_id, flag).get());
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         allTopics.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, getArray(topic_headings)));
         allTopics.setOnItemClickListener(this);
 
@@ -76,42 +78,6 @@ public class TopicsFragment extends Fragment implements AdapterView.OnItemClickL
             e.printStackTrace();
         }
         return topics;
-    }
-
-    private class GetTopics extends AsyncTask<Integer, Void, String> {
-
-        String url = getResources().getString(R.string.root) + "retrieve_topics.php";
-
-        @Override
-        protected String doInBackground(Integer... params) {
-
-            try {
-
-                String data = URLEncoder.encode("flag", "UTF-8") + "=" + URLEncoder.encode(params[0].toString(), "UTF-8");
-
-                URL u = new URL(url);
-                URLConnection conn = u.openConnection();
-
-                conn.setDoOutput(true);
-
-                OutputStreamWriter ow = new OutputStreamWriter(conn.getOutputStream());
-                ow.write(data);
-                ow.flush();
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                    sb.append("\n");
-                }
-
-                return sb.toString();
-
-            } catch (Exception e) {
-                return "Exception: " + e.getMessage();
-            }
-        }
     }
 
 }

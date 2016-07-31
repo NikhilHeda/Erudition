@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -99,13 +100,15 @@ public class NavDrawer extends ActionBarActivity {
             menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
             return super.onPrepareOptionsMenu(menu);
         }
+    */
 
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            // toggle nav drawer on selecting action bar app icon/title
-            if (mDrawerToggle.onOptionsItemSelected(item)) {
-                return true;
-            }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // toggle nav drawer on selecting action bar app icon/title
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+            /*
             // Handle action bar actions click
             switch (item.getItemId()) {
                 case R.id.action_settings:
@@ -113,8 +116,10 @@ public class NavDrawer extends ActionBarActivity {
                 default:
                     return super.onOptionsItemSelected(item);
             }
-        }
-    */
+            */
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;

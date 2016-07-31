@@ -62,9 +62,9 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Ra
         if (checkCredentials()) {
             Bundle b = new Bundle();
             b.putString("user_id", user_id);
-            Intent i = new Intent("com.heda.crazyguy.sleepybone.quiz.HOMEPAGENAV");
+            Intent i = new Intent(getActivity(), HomePageNav.class);
             i.putExtras(b);
-            startActivity(i);
+            getActivity().startActivity(i);
         }
 
     }
