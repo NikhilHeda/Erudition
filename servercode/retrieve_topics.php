@@ -2,7 +2,7 @@
 	require 'core.inc.php';
 	require 'connect.inc.php';
 
-	$user_id = 1;
+	$user_id = $_POST['user_id'];
 
 	if ($_POST['flag'] == 1){
 		$query = "
