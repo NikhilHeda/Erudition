@@ -8,10 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -27,9 +30,8 @@ import java.net.URLEncoder;
 public class TotalScoreFragment extends Fragment implements View.OnClickListener {
 
     TableLayout table;
-    TextView total_score;
     String user_id;
-    JSONArray result;
+    JSONArray results;
 
     @Nullable
     @Override
@@ -46,24 +48,51 @@ public class TotalScoreFragment extends Fragment implements View.OnClickListener
     private void intialize(View rootview) {
 
         table = (TableLayout) rootview.findViewById(R.id.tlTableTS);
-        total_score = (TextView) rootview.findViewById(R.id.tvTotalScore);
-
+        try {
+            results = new JSONArray(new GetTotalScore().execute(user_id).get());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        display(results);
     }
 
     @Override
     public void onClick(View view) {
 
-        try {
-            result = new JSONArray(new GetTotalScore().execute(user_id).get());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Toast.makeText(getActivity(), (CharSequence) result, Toast.LENGTH_SHORT).show();
-        display(result);
     }
 
     private void display(JSONArray results) {
+        TableRow tablerow;
+        TextView text, sl_no;
+        JSONObject row;
+        String value;
 
+        String[] fields = {"topic_name", "score"};
+
+        for(int i = 0; i < results.length(); i++) {
+            tablerow = new TableRow(getActivity());
+
+            try {
+//              For Serial Number:
+                sl_no = new TextView(getActivity());
+                sl_no.setPadding(10, 10, 10, 10);
+                sl_no.setText(String.valueOf(i + 1));
+                tablerow.addView(sl_no);
+
+                row = results.getJSONObject(i);
+                for(int j = 0; j < 2; j++) {
+                    value = row.getString(fields[j]);
+                    text = new TextView(getActivity());
+                    text.setPadding(10, 10, 10, 10);
+                    text.setText(value);
+                    tablerow.addView(text);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            table.addView(tablerow);
+        }
     }
 
     private class GetTotalScore extends AsyncTask<String, Void, String> {
@@ -96,7 +125,7 @@ public class TotalScoreFragment extends Fragment implements View.OnClickListener
                 return sb.toString();
 
             } catch (Exception e) {
-                return "Exception " + e.getMessage();
+                return "Exception: " + e.getMessage();
             }
         }
     }
