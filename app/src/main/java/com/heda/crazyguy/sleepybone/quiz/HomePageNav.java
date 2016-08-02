@@ -152,7 +152,7 @@ public class HomePageNav extends ActionBarActivity {
                 fragment = new HomePageFragment();
                 break;
             case 1:
-                // fragment = new TotalScoreFragment();
+                fragment = new TotalScoreFragment();
                 break;
             case 2:
             case 3:

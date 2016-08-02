@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tlTableTS"
+            android:stretchColumns="3">
+
+            <TableRow>
+
+                <TextView
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:text="Serial Number" />
+
+                <TextView
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:text="Topic Name" />
+
+                <TextView
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:text="Score" />
+
+            </TableRow>
+
+        </TableLayout>
+
+</HorizontalScrollView>
